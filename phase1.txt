@@ -1,0 +1,28 @@
+# Phase 1: False sharing
+## Table 1A
+| Stride | Bytes | Median ms | IQR ms | Mops/s |
+| --- | --- | --- | --- | --- |
+| 1 | 8 | 1477.765400 | 275.192500 | 16.240738 |
+| 2 | 16 | 1513.349000 | 561.058400 | 15.858867 |
+| 4 | 32 | 1511.696400 | 303.359900 | 15.876204 |
+| 8 | 64 | 1621.219400 | 223.372300 | 14.803672 |
+| 16 | 128 | 1672.441700 | 352.243800 | 14.350276 |
+| 32 | 256 | 1324.360200 | 335.091200 | 18.121958 |
+## Table 1B
+| Stride | p | Median ms | IQR ms | S | E | e(p) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1 | 4622.195700 | 26.142400 | 1.000000 | 1.000000 | N/A |
+| 1 | 2 | 2549.420200 | 62.740200 | 1.813038 | 0.906519 | 0.103121 |
+| 1 | 4 | 1843.307800 | 295.429100 | 2.507555 | 0.626889 | 0.198393 |
+| 1 | 8 | 1424.288700 | 214.199700 | 3.245266 | 0.405658 | 0.209304 |
+| 1 | 12 | 1345.508500 | 16.606000 | 3.435278 | 0.286273 | 0.226652 |
+| 16 | 1 | 4638.699600 | 75.384900 | 1.000000 | 1.000000 | N/A |
+| 16 | 2 | 2425.842500 | 329.643400 | 1.912201 | 0.956101 | 0.045915 |
+| 16 | 4 | 1733.379900 | 184.115400 | 2.676101 | 0.669025 | 0.164904 |
+| 16 | 8 | 1400.083400 | 54.176400 | 3.313159 | 0.414145 | 0.202088 |
+| 16 | 12 | 1496.206100 | 535.564100 | 3.100308 | 0.258359 | 0.260962 |
+Largest adjacent timing reduction: 20.81% at separation 256 bytes.
+This is a candidate transition, not proof of cache-line size. Compare it with IQR and the OS hardware data.
+False sharing can increase e(p) because workers write different words belonging to the same coherence line. Padding reduces invalidations. Process startup and Python execution overhead can mask the effect.
+VERIFY_HASH[PHASE1]: DF0B13704EACB55A (P_log=12)
+STATUS: COMPLETED

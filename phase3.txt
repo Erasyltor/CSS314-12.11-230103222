@@ -1,0 +1,37 @@
+# Phase 3: Roofline and GEMM
+| Metric | Value |
+| --- | --- |
+| Copy median ms | 13.299400 |
+| Copy IQR ms | 0.122700 |
+| Effective copy GB/s | 14.436742 |
+| Compute median ms | 1017.364200 |
+| Compute IQR ms | 17.473800 |
+| Python GFLOP/s | 0.471807 |
+| Ridge FLOP/byte | 0.032681 |
+Copy timing includes Pool dispatch and shared-memory attachment. 2*size counts useful read/write traffic; actual DRAM traffic may differ because of caches and write allocation.
+Python x*a+b is not a hardware fused-FMA instruction. This is an interpreter compute ceiling.
+| Variant | BS | Median ms | IQR ms | GFLOP/s | Tile bytes | Max error |
+| --- | --- | --- | --- | --- | --- | --- |
+| Naive | - | 1121.424600 | 25.532600 | 0.100984 | - | 0.000000 |
+| Reordered | - | 1348.294100 | 33.602900 | 0.083992 | - | 0.000000 |
+| Tiled | 4 | 2105.471000 | 27.063300 | 0.053787 | 384 | 0.000000 |
+| Tiled | 8 | 1493.658300 | 24.027400 | 0.075818 | 1536 | 0.000000 |
+| Tiled | 12 | 1331.783300 | 47.298500 | 0.085034 | 3456 | 0.000000 |
+| Tiled | 16 | 1228.087800 | 16.960200 | 0.092213 | 6144 | 0.000000 |
+| Tiled | 24 | 1147.944000 | 56.214900 | 0.098651 | 13824 | 0.000000 |
+| Tiled | 32 | 1107.418100 | 11.272300 | 0.102261 | 24576 | 0.000000 |
+| Tiled | 48 | 1057.586300 | 22.589700 | 0.107080 | 55296 | 0.000000 |
+| Tiled | 64 | 1050.846200 | 25.454800 | 0.107767 | 98304 | 0.000000 |
+| Tiled | 96 | 1040.023400 | 18.215700 | 0.108888 | 221184 | 0.000000 |
+| Tiled | 128 | 1025.620300 | 37.549200 | 0.110417 | 393216 | 0.000000 |
+Best BS: 128
+Best tile footprint: 393216 bytes
+| Variant | Assumed FLOP/byte | Roof GFLOP/s | Measured GFLOP/s | Percent of roof |
+| --- | --- | --- | --- | --- |
+| Naive | 0.125000 | 0.471807 | 0.100984 | 21.403697 |
+| Reordered | 0.083333 | 0.471807 | 0.083992 | 17.802223 |
+| Best tiled | 10.666667 | 0.471807 | 0.110417 | 23.403040 |
+Reordered intensity 1/12 is a simplified inner-loop model: 8-byte B read + 8-byte C read + 8-byte C write per 2 FLOPs. It is not measured DRAM intensity. The three mappings are approximate, not hardware-counter results.
+Tiling trades data locality against extra Python loops, indexing and memoryview operations. The best tile does not have to fit exactly into a nominal cache capacity.
+VERIFY_HASH[PHASE3]: FCE74F55F7039199 (P_log=12)
+STATUS: COMPLETED

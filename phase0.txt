@@ -1,0 +1,19 @@
+# Phase 0: Hardware and timer
+| Parameter | Value |
+| --- | --- |
+| Student ID | 230103222 |
+| CPU model | Вставь название CPU |
+| Physical cores | 6 |
+| Logical processors | 12 |
+| Cache line bytes | None |
+| L1d per core | Вставь L1 Data на одно ядро или: unavailable |
+| L2 | Вставь размер и область: на ядро / общий |
+| L3 | Вставь размер L3 |
+| Python | 3.14.3 |
+| OS | Windows-11-10.0.26200-SP0 |
+Clock reads: 2000000
+Average clock-read loop latency: 51.357400 ns
+This estimate includes Python loop overhead.
+Hash metrics: average_ns, PLOG
+VERIFY_HASH[PHASE0]: 81163CD32A5E7C30 (P_log=12)
+STATUS: COMPLETED
